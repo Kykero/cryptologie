@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class Hamming {
+<<<<<<< HEAD
     private int n; // longueur du mot de code : n = 2^m - 1
     private int k; // longueur du mot source : k = n - m
     private int[][] G;     // matrice génératrice (non utilisée directement ici)
@@ -167,4 +168,48 @@ public class Hamming {
             System.out.println("------------------------------------------------------");
         }
     }
+=======
+	private int n;
+	private int k;
+	private int[][]G;
+	private int[][]H;
+	private int[][]Gsys;
+	private int[][]Hsys;
+
+	public Hamming(int n,int k){
+		this.n=n;
+		this.k=k;
+		int m = n-k;
+		
+
+	}
+	
+
+	
+        
+	public void genereH(int m, int n) {
+		
+		int nbBase10;
+		int puissance = 2;
+		int ii = m-1;
+		for(int j=0; j<n ;j++) {
+			nbBase10 = j + 1;
+			if (nbBase10 >= puissance) {
+				puissance *= 2;
+				ii --;
+			}
+			for (int i = m-1; i>=ii; i--) {
+				H[i][j] = nbBase10 % 2;
+				nbBase10 /=2;
+			}
+		}	
+	}
+
+	public
+	
+	public void main(String[] args) {
+		
+	}
+
+>>>>>>> c2b3a988b1efea1c00c1a63656516d2e480756a7
 }
