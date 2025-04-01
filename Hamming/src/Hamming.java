@@ -100,6 +100,30 @@ public class Hamming {
     }//systematiqueH
 
 
+    //Question 3 ExtraitP (sous matrice de vérification de parité)
+    public int[][] extraitP(){
+        int m = Hsys.length;
+        int n = Hsys[0].length;
+        int k = n - m; // k = 2^m - 1 - m
+        int[][] P = new int[k][m]; // P de dimension k x m
+
+        // Transposition du bloc gauche (de dimension m x k) pour obtenir P.
+        for (int i = 0; i < k; i++) {
+            for (int j = 0; j < m; j++) {
+                P[i][j] = Hsys[j][i];
+            }
+        }
+        return P;
+    }//extraitP
+
+
+
+
+
+
+
+
+
     public static void main(String args[]){
         Hamming h = new Hamming();
         // Calcul de n et k
