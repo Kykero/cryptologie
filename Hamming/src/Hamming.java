@@ -7,6 +7,14 @@ public class Hamming {
 	private int[][]H;
 	private int[][]Gsys;
 	private int[][]Hsys;
+
+	public Hamming(int n,int k){
+		this.n=n;
+		this.k=k;
+		int m = n-k;
+		
+
+	}
 	
 
 	
@@ -26,10 +34,10 @@ public class Hamming {
 				H[i][j] = nbBase10 % 2;
 				nbBase10 /=2;
 			}
-		}
-				
-		
+		}	
 	}
+
+	public
 	
 	public void main(String[] args) {
 		
