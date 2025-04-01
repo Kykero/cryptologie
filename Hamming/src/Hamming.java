@@ -116,9 +116,29 @@ public class Hamming {
         return P;
     }//extraitP
 
+    // Question 4 : Construction de la matrice génératrice systématique Gsys
+    public void systematiqueG() {
+        int m = H.length;    
+        int n = H[0].length; 
+        int k = n - m;      
+        int[][] P = extraitP();  // P est de dimension k x m
 
+        Gsys = new int[k][n];
 
+        // Construction de l'identité dans les k premières colonnes
+        for(int i = 0; i < k ; i++){
+            for(int j = 0; j < k; j++){
+                Gsys[i][j] = (i == j) ? 1 : 0; // Si on est sur la diagonale on assigne 1, sinon 0 (cela permet à construire l'identité)
+            }
+        }
 
+        // On injecte P dans les m dernières colonnes
+        for(int i = 0; i < k; i ++) {
+            for (int j = 0; j < m; j++){
+                Gsys[i][k+j] = P[i][j];
+            }
+        }
+    }
 
 
 
@@ -134,6 +154,10 @@ public class Hamming {
         h.genereH(2, h.n);
         h.systematiqueH();
         printMatrice(h.Hsys);
+        System.out.println("////////");
+        
+        h.systematiqueG();
+        printMatrice(h.Gsys);
     }
 
 
