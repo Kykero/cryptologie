@@ -144,22 +144,43 @@ public class Hamming {
 
 
 
-    public static void main(String args[]){
-        Hamming h = new Hamming();
-        // Calcul de n et k
-        h.n = (int) Math.pow(2, 2) - 1;
-        h.k = h.n - 2;
+    public static void main(String[] args) {
 
-        h.H = new int[2][h.n];
-        h.genereH(2, h.n);
-        h.systematiqueH();
-        printMatrice(h.Hsys);
-        System.out.println("////////");
-        
-        h.systematiqueG();
-        printMatrice(h.Gsys);
-    }
-
+        // Question 5 : m = 2 à 7 
+        for (int m = 2; m <= 7; m++) {
+            Hamming h = new Hamming();
+            // Calcul de n et k
+            h.n = (int) Math.pow(2, m) - 1;
+            h.k = h.n - m;
+            
+            // Allocation de la matrice H
+            h.H = new int[m][h.n];
+            
+            // Génération de H non systématique
+            h.genereH(m, h.n);
+            System.out.println("Matrice H (non systématique) pour m = " + m + " (dimension " + m + "x" + h.n + "):");
+            printMatrice(h.H);
+            System.out.println();
+            
+            // Réordonnancement pour obtenir Hsys 
+            h.systematiqueH();
+            System.out.println("Matrice H_sys (systématique) pour m = " + m + " (dimension " + m + "x" + h.n + "):");
+            printMatrice(h.Hsys);
+            System.out.println();
+            
+            // Extraction de la sous-matrice P (de dimension k x m)
+            int[][] P = h.extraitP();
+            System.out.println("Sous-matrice P pour m = " + m + " (dimension " + h.k + "x" + m + "):");
+            printMatrice(P);
+            System.out.println();
+            
+            // Construction de la matrice génératrice systématique Gsys
+            h.systematiqueG();
+            System.out.println("Matrice G_sys (systématique) pour m = " + m + " (dimension " + h.k + "x" + h.n + "):");
+            printMatrice(h.Gsys);
+            System.out.println("------------------------------------------------------");
+        }
+    }//main
 
 
 }//class
