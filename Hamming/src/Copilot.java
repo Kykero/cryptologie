@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Hamming {
+public class Copilot {
     private int n; // longueur du mot de code : n = 2^m - 1
     private int k; // longueur du mot source : k = n - m
     private int[][] G;     // matrice génératrice (non utilisée directement ici)
@@ -131,10 +131,10 @@ public class Hamming {
     }
     
     
-    // Question 5 : Génère et affiche les matrices de Hamming pour m = 2 à 7.
+    // Question 5 : Génère et affiche les matrices de Copilot pour m = 2 à 7.
     public static void main(String[] args) {
         for (int m = 2; m <= 7; m++) {
-            Hamming h = new Hamming();
+            Copilot h = new Copilot();
             // Calcul de n et k
             h.n = (int) Math.pow(2, m) - 1;
             h.k = h.n - m;
