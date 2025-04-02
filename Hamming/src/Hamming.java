@@ -495,6 +495,8 @@ public class Hamming {
         int[] message = DecodageAstuce(code);
         System.out.println("Message extrait après décodage (astuce) : " + bitArrayToString(message));
         System.out.println();
+
+        
         // ===============================
         // Question 10 : BSC Rand
         // ===============================
