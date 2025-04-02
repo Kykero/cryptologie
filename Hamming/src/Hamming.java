@@ -49,7 +49,7 @@ public class Hamming {
         }
     }
 
-    // Qestuin 2 : SystematiqueH
+    // Qestion 2 : SystematiqueH
 
     public void systematiqueH() {
         int m = H.length;
