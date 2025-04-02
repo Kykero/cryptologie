@@ -23,7 +23,7 @@ public class Hamming {
 
     // Question 1 : Génère la matrice de contrôle H à partir de l’énumération de
     // tous les
-    // mots de m bits non nuls. (Le professeur a proposé cette correction).
+    // mots de m bits non nuls.
     public void genereH(int m, int n) {
         int nbBase10;
         int puissance = 2;
@@ -47,7 +47,7 @@ public class Hamming {
         int m = H.length;
         int n = H[0].length;
 
-        // Liste des colonnes qui ne sont pas des vecruers unitaires
+        // Liste des colonnes qui ne sont pas des vecteurs unitaires
         List<Integer> nonIdentite = new ArrayList<>();
 
         int[] ColonnesIdentite = new int[m];
@@ -164,7 +164,7 @@ public class Hamming {
 
     // Méthode pour convertir en tableau de bits
     public static int[] stringToBitArray(String s) {
-        String cleaned = s.replaceAll("\\s+", ""); // Regular expression pour nettoyer tout les espaces
+        String cleaned = s.replaceAll("\\s+", ""); // pour nettoyer tout les espaces
         int[] bits = new int[cleaned.length()];
         for (int i = 0; i < cleaned.length(); i++) {
             bits[i] = cleaned.charAt(i) - '0'; // converti chaque caractère
