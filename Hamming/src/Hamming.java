@@ -7,8 +7,11 @@ public class Hamming {
     private int[][] H; // matrice de contrôle non réordonnée
     private int[][] Gsys; // matrice génératrice systématique
     private int[][] Hsys; // matrice de contrôle systématique
-    // Méthode de débuggage pour afficher les matrices
 
+    // Tableau de décodage
+    private int[][] decodingTable;
+
+    // Méthode de débuggage pour afficher les matrices
     public static void printMatrice(int[][] matrice) {
         for (int i = 0; i < matrice.length; i++) {
             for (int j = 0; j < matrice[i].length; j++) {
@@ -192,9 +195,86 @@ public class Hamming {
         return result;
     }
 
-
     // Question 8 Décodage par tableau
-    
+
+    // On commence par faire la méthode de calcul du syndrome
+    public static int[] calculSyndrome(int[] y, int[][] Hmatrice) {
+        int m = Hmatrice.length;
+        int n = Hmatrice[0].length;
+        int[] syndrome = new int[m];
+
+        for (int i = 0; i < m; i++) {
+            int sum = 0;
+            for (int j = 0; j < n; j++) {
+                sum ^= (y[j] * Hmatrice[i][j]); // Logique XOR
+            }
+            syndrome[i] = sum;
+        }
+        return syndrome;
+    }
+
+    // Conversion du syndrôme en entier pour faciliter la recherche (on récupère
+    // directement l'indice)
+    /*
+     * On considère le syndrome comme un nombre binaire et on le converti en entier
+     */
+    public int SyndromEnEntier(int[] syndrome) {
+        int SyndromeValeur = 0;
+        for (int i = 0; i < syndrome.length; i++) {
+            SyndromeValeur = (SyndromeValeur << 1) | syndrome[i];
+        }
+        return SyndromeValeur;
+    }
+
+    // IL nous faut une méthode pour extraire le mot source à partir d'un mot de
+    // code systématique (k premiers bits)
+    public int[] Extraction(int[] code) {
+        int[] message = new int[k]; // On prend les k premiers bits
+        System.arraycopy(code, 0, message, 0, k); // Permet de copier rapidement le tableau vers un autre !
+        return message;
+    }
+
+    // Table de décodage
+    public void ConstructionTable() {
+        int m = Hsys.length;
+        int n = Hsys[0].length;
+        int nombreDeSyndrome = (int) Math.pow(2, m);
+
+        decodingTable = new int[nombreDeSyndrome][n];
+
+        for (int j = 0; j < n; j++) {
+            int[] SyndromeColonne = new int[m];
+            for (int i = 0; i < m; i++) {
+                SyndromeColonne[i] = Hsys[i][j];
+            }
+            int ValeurSyndrome = SyndromEnEntier(SyndromeColonne);
+            decodingTable[ValeurSyndrome][j] = 1;
+        }
+        // Le cas ou le syndrôme est nul
+        for (int j = 0; j < n; j++) {
+            decodingTable[0][j] = 0;
+        }
+    }
+
+    // Décodage à l'aide du tableau
+    public int[] DecodeTable(int[] vecteur) {
+        int[] syndrome = calculSyndrome(vecteur, Hsys);
+        int ValeurSyndrome = SyndromEnEntier(syndrome);
+
+        int[] erreur = decodingTable[ValeurSyndrome];
+
+        int[] correction = new int[vecteur.length];
+        for (int i = 0; i < vecteur.length; i++) {
+            correction[i] = vecteur[i] ^ erreur[i]; // Correction par la porte logique XOR
+        }
+        return Extraction(correction);
+    }
+
+
+    // Question 9 
+
+
+
 
 
     public static void main(String[] args) {
@@ -303,6 +383,21 @@ public class Hamming {
         System.out.println("y3 = " + bitArrayToString(y3));
         System.out.println("y4 = " + bitArrayToString(y4));
         System.out.println();
+
+        // ===============================
+        // Question 8 : Décodage par tableau
+        // ===============================
+        h.ConstructionTable();
+        int[] dec0 = h.DecodeTable(y1);
+        int[] dec1 = h.DecodeTable(y2);
+        int[] dec2 = h.DecodeTable(y3);
+        int[] dec3 =h. DecodeTable(y4);
+
+        System.out.println("Décodage par tableau standard :");
+        System.out.println("u0 décodé = " + bitArrayToString(dec0));
+        System.out.println("u1 décodé = " + bitArrayToString(dec1));
+        System.out.println("u2 décodé = " + bitArrayToString(dec2));
+        System.out.println("u3 décodé = " + bitArrayToString(dec3));
 
     }// main
 
