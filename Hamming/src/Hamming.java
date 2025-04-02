@@ -270,12 +270,58 @@ public class Hamming {
         return Extraction(correction);
     }
 
+    // Question 9 Décodage Astuce
 
-    // Question 9 
+    /*
+     * Méthode d'extraction simplifié avec l'astuce
+     */
+    public static int[] extractionAstuce(int[] code) {
+        ArrayList<Integer> messageList = new ArrayList<>();
+        for (int i = 0; i < code.length; i++) {
+            int position = i + 1;
+            if ((position & (position - 1)) != 0) {
+                messageList.add(code[i]);
+            }
+        }
+        int[] message = new int[messageList.size()];
+        for (int i = 0; i < messageList.size(); i++) {
+            message[i] = messageList.get(i);
+        }
+        return message;
+    }
 
+    public static int[] DecodageAstuce(int[] vecteur) {
+        int n = vecteur.length;
+        int syndrome = 0;
+        int[] PositionParite = { 1, 2, 4, 8 }; // On s'arrête à 8 car la taille max du code est de 15 (le prochain 2^x
+                                               // sera 16)
 
+        for (int p : PositionParite) {
+            int parite = 0;
+            for (int i = 0; i < n; i++) {
+                if (((i + 1) & p) != 0) {
+                    parite ^= vecteur[i]; // Porte Logique XOR
+                }
+            }
+            if (parite != 0) {
+                syndrome += p;
+            }
+        }
+        int[] correction = Arrays.copyOf(vecteur, n);
+        if (syndrome > 0 && syndrome <= n) {
+            // Correction : inversion du bit arrivé en erreur au rang syndrome-1 (0-indexé)
+            correction[syndrome - 1] ^= 1;
+        }
+        return extractionAstuce(correction);
+    }
 
-
+    public static String bitToString(int[] vecteur) {
+        StringBuilder sb = new StringBuilder(); // Chaine non immuable (contraire de String)
+        for (int bit : vecteur) {
+            sb.append(bit);
+        }
+        return sb.toString();
+    }
 
     public static void main(String[] args) {
 
@@ -391,13 +437,32 @@ public class Hamming {
         int[] dec0 = h.DecodeTable(y1);
         int[] dec1 = h.DecodeTable(y2);
         int[] dec2 = h.DecodeTable(y3);
-        int[] dec3 =h. DecodeTable(y4);
+        int[] dec3 = h.DecodeTable(y4);
 
         System.out.println("Décodage par tableau standard :");
         System.out.println("u0 décodé = " + bitArrayToString(dec0));
         System.out.println("u1 décodé = " + bitArrayToString(dec1));
         System.out.println("u2 décodé = " + bitArrayToString(dec2));
         System.out.println("u3 décodé = " + bitArrayToString(dec3));
+        System.out.println();
+
+
+        // ===============================
+        // Question 9 : Décodage par tableau
+        // ===============================
+
+        // On prend en exemple un code en 15 bits avec une erreur en position 5.
+        int[] VecteurCode = { 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1 };
+        
+        // On ajoute du bruit en inversant le bit en position 5 (VecteurCode[4])
+        int[] code = Arrays.copyOf(VecteurCode, VecteurCode.length);
+        code[4] ^= 1; // On le fait à la main 
+
+        System.out.println("Mot reçu (avec erreur) : " + bitArrayToString(code));
+
+        // Décodage par l'astuce
+        int[] message = DecodageAstuce(code);
+        System.out.println("Message extrait après décodage (astuce) : " + bitArrayToString(message));
 
     }// main
 
