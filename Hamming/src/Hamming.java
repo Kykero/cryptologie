@@ -1,3 +1,11 @@
+
+/*
+ * Debusschere Mathieu
+ * Fernandez Nolahn
+ * TP Hamming Java 
+ * L3 MM2I
+ * 
+ */
 import java.util.*;
 
 public class Hamming {
@@ -323,6 +331,30 @@ public class Hamming {
         return sb.toString();
     }
 
+    // Question 10 : BSC
+
+    /**
+     * Simule le bruit BSC sur un mot de code.
+     *
+     * Pour chaque bit du mot de code, on inverse le bit (flip)
+     * avec une probabilité donnée (prob).
+     */
+    public static int[] BSC(int[] code, double prob) {
+        int n = code.length;
+        int[] noisy = new int[n];
+        Random rand = new Random();
+
+        for (int i = 0; i < n; i++) {
+            if (rand.nextDouble() < prob) {
+                // Inversion du bit
+                noisy[i] = code[i] ^ 1;
+            } else {
+                noisy[i] = code[i];
+            }
+        }
+        return noisy;
+    }
+
     public static void main(String[] args) {
 
         // Question 5 : m = 2 à 7
@@ -446,23 +478,35 @@ public class Hamming {
         System.out.println("u3 décodé = " + bitArrayToString(dec3));
         System.out.println();
 
-
         // ===============================
         // Question 9 : Décodage par tableau
         // ===============================
 
         // On prend en exemple un code en 15 bits avec une erreur en position 5.
         int[] VecteurCode = { 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1 };
-        
+
         // On ajoute du bruit en inversant le bit en position 5 (VecteurCode[4])
         int[] code = Arrays.copyOf(VecteurCode, VecteurCode.length);
-        code[4] ^= 1; // On le fait à la main 
+        code[4] ^= 1; // On le fait à la main
 
         System.out.println("Mot reçu (avec erreur) : " + bitArrayToString(code));
 
         // Décodage par l'astuce
         int[] message = DecodageAstuce(code);
         System.out.println("Message extrait après décodage (astuce) : " + bitArrayToString(message));
+        System.out.println();
+        // ===============================
+        // Question 10 : BSC Rand
+        // ===============================
+
+        // Exemple: on suppose un mot de code (en ordre naturel ou systématique) de 15
+        // bits
+        int[] VecteurCode2 = { 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0 };
+        double p = 0.1; // Probabilité de renverser chaque bit, par exemple 10%
+
+        int[] CodeBruit = BSC(VecteurCode2, p);
+        System.out.println("Mot de code original : " + bitArrayToString(VecteurCode2));
+        System.out.println("Mot de code après bruit BSC (p = " + p + ") : " + bitArrayToString(CodeBruit));
 
     }// main
 
