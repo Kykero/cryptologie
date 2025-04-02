@@ -1,8 +1,8 @@
 import java.util.*;
 import java.util.regex.*;
 
-public class Hamming {
-    // Paramètres pour un code de Hamming [2^m - 1, 2^m - 1 - m, 3]
+public class Copilot {
+    // Paramètres pour un code de Copilot [2^m - 1, 2^m - 1 - m, 3]
     // Ici, pour la partie 6 à 10, nous utilisons m = 4 (donc n = 15, k = 11)
     private int m; // nombre de bits de parité
     private int n; // longueur du mot de code : n = 2^m - 1
@@ -385,7 +385,7 @@ public class Hamming {
         int nVal = (int) Math.pow(2, mVal) - 1; // 15
         int kVal = nVal - mVal;                // 11
         
-        Hamming h = new Hamming();
+        Copilot h = new Copilot();
         h.m = mVal;
         h.n = nVal;
         h.k = kVal;
@@ -401,7 +401,7 @@ public class Hamming {
         // Construction du tableau de décodage (pour décodage par tableau)
         h.buildDecodingTable();
         
-        System.out.println("----- TP – Codage / Bruitage / Décodage pour un Code de Hamming [15,11,3] -----\n");
+        System.out.println("----- TP – Codage / Bruitage / Décodage pour un Code de Copilot [15,11,3] -----\n");
         
         // ===============================
         // Question 6 : Codage d'un mot source

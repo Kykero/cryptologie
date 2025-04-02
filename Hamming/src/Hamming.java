@@ -5,9 +5,10 @@ public class Hamming {
     private int k; // longueur du mot source : k = n - m
     private int[][] G; // matrice génératrice
     private int[][] H; // matrice de contrôle non réordonnée
-    private int[][] Gsys; // matrice génératrice systématique 
-    private int[][] Hsys; // matrice de contrôle systématique 
+    private int[][] Gsys; // matrice génératrice systématique
+    private int[][] Hsys; // matrice de contrôle systématique
     // Méthode de débuggage pour afficher les matrices
+
     public static void printMatrice(int[][] matrice) {
         for (int i = 0; i < matrice.length; i++) {
             for (int j = 0; j < matrice[i].length; j++) {
@@ -136,22 +137,22 @@ public class Hamming {
     }
 
     // Question 6 : C0 C1 C2 C3 mot source
-    // 
+    //
     // Codage d'un mot source via la matrice génératrice systématique Gsys (mod 2)
     public int[] encodeSystematic(int[] source) {
         if (Gsys == null) {
-            System.out.println("Gsys n'est pas construit.");
+            System.out.println("Gsys n'as pas été construit ! (encodeSystematic)");
             return null;
         }
         int n = Gsys[0].length; // Longueur du mot de code
         int k = source.length; // Longueur du mot source
         int[] code = new int[n]; // Code généré
 
-        // Produit matriciel u * Gsys (modulo 2)
+        // Produit matriciel u * Gsys
         for (int j = 0; j < n; j++) {
             int sum = 0;
             for (int i = 0; i < k; i++) {
-                sum ^= (source[i] * Gsys[i][j]); // XOR pour addition mod 2
+                sum ^= (source[i] * Gsys[i][j]);
             }
             code[j] = sum;
         }
@@ -160,15 +161,15 @@ public class Hamming {
 
     // Méthode pour convertir en tableau de bits
     public static int[] stringToBitArray(String s) {
-        String cleaned = s.replaceAll("\\s+", "");
+        String cleaned = s.replaceAll("\\s+", ""); // Regular expression pour nettoyer tout les espaces
         int[] bits = new int[cleaned.length()];
         for (int i = 0; i < cleaned.length(); i++) {
-            bits[i] = cleaned.charAt(i) - '0';
+            bits[i] = cleaned.charAt(i) - '0'; // converti chaque caractère
         }
         return bits;
     }
 
-    // Convertit un tableau de bits en chaîne, par exemple pour affichage.
+    // Convertit un tableau de bits en chaîne (pour affichage)
     public static String bitArrayToString(int[] bits) {
         StringBuilder sb = new StringBuilder();
         for (int bit : bits) {
@@ -177,45 +178,63 @@ public class Hamming {
         return sb.toString();
     }
 
+    // Question 7 Ajout du bruit dans le code (il s'agit d'une opération logique
+    // XOR)
+    public static int[] ajoutBruit(int[] code, int[] bruit) {
+        if (code.length != bruit.length) {
+            System.out.println("Les vecteurs ne sont pas de même longueurs (ajoutBruit)");
+            System.exit(-1);
+        }
+        int[] result = new int[code.length];
+        for (int i = 0; i < code.length; i++) {
+            result[i] = code[i] ^ bruit[i];
+        }
+        return result;
+    }
+
+
+    // Question 8 Décodage par tableau
+    
+
+
     public static void main(String[] args) {
 
-        //Question 5 : m = 2 à 7
+        // Question 5 : m = 2 à 7
         for (int m = 2; m <= 7; m++) {
-        Hamming h = new Hamming();
-        // Calcul de n et k
-        h.n = (int) Math.pow(2, m) - 1;
-        h.k = h.n - m;
+            Hamming h = new Hamming();
+            // Calcul de n et k
+            h.n = (int) Math.pow(2, m) - 1;
+            h.k = h.n - m;
 
-        // Allocation de la matrice H
-        h.H = new int[m][h.n];
+            // Allocation de la matrice H
+            h.H = new int[m][h.n];
 
-        // Génération de H non systématique
-        h.genereH(m, h.n);
-        System.out.println("Matrice H (non systématique) pour m = " + m + "(dimension " + m + "x" + h.n + "):");
-        printMatrice(h.H);
-        System.out.println();
+            // Génération de H non systématique
+            h.genereH(m, h.n);
+            System.out.println("Matrice H (non systématique) pour m = " + m + "(dimension " + m + "x" + h.n + "):");
+            printMatrice(h.H);
+            System.out.println();
 
-        // Réordonnancement pour obtenir Hsys
-        h.systematiqueH();
-        System.out.println("Matrice H_sys (systématique) pour m = " + m + "(dimension " + m + "x" + h.n + "):");
-        printMatrice(h.Hsys);
-        System.out.println();
+            // Réordonnancement pour obtenir Hsys
+            h.systematiqueH();
+            System.out.println("Matrice H_sys (systématique) pour m = " + m + "(dimension " + m + "x" + h.n + "):");
+            printMatrice(h.Hsys);
+            System.out.println();
 
-        // Extraction de la sous-matrice P (de dimension k x m)
-        int[][] P = h.extraitP();
-        System.out.println("Sous-matrice P pour m = " + m + " (dimension " + h.k +
-        "x" + m + "):");
-        printMatrice(P);
-        System.out.println();
+            // Extraction de la sous-matrice P (de dimension k x m)
+            int[][] P = h.extraitP();
+            System.out.println("Sous-matrice P pour m = " + m + " (dimension " + h.k +
+                    "x" + m + "):");
+            printMatrice(P);
+            System.out.println();
 
-        // Construction de la matrice génératrice systématique Gsys
-        h.systematiqueG();
-        System.out.println("Matrice G_sys (systématique) pour m = " + m + "(dimension " + h.k + "x" + h.n + "):");
-        printMatrice(h.Gsys);
-        System.out.println("------------------------------------------------------");
+            // Construction de la matrice génératrice systématique Gsys
+            h.systematiqueG();
+            System.out.println("Matrice G_sys (systématique) pour m = " + m + "(dimension " + h.k + "x" + h.n + "):");
+            printMatrice(h.Gsys);
+            System.out.println("------------------------------------------------------");
         }
 
-  
         // ===============================
         // Question 6 : Codage d'un mot source
         // ===============================
@@ -223,16 +242,16 @@ public class Hamming {
 
         int mVal = 4;
         int nVal = (int) Math.pow(2, mVal) - 1; // 15
-        int kVal = nVal - mVal;                // 11
-        
+        int kVal = nVal - mVal; // 11
+
         Hamming h = new Hamming();
         h.n = nVal;
         h.k = kVal;
-        
+
         // Allocation de la matrice H (ordre naturel)
         h.H = new int[mVal][nVal];
         h.genereH(mVal, nVal);
-        
+
         // Passage en forme systématique et génération de la matrice génératrice Gsys
         h.systematiqueH();
         h.systematiqueG();
@@ -240,25 +259,51 @@ public class Hamming {
         String u1Str = "000 0100 1111";
         String u2Str = "000 0100 0100";
         String u3Str = "000 0100 0101";
-        
+
         // Conversion en tableaux de bits (longueur 11)
         int[] u0 = stringToBitArray(u0Str);
         int[] u1 = stringToBitArray(u1Str);
         int[] u2 = stringToBitArray(u2Str);
         int[] u3 = stringToBitArray(u3Str);
-        
+
         // Codage systématique via Gsys (u * Gsys)
         int[] c0 = h.encodeSystematic(u0);
         int[] c1 = h.encodeSystematic(u1);
         int[] c2 = h.encodeSystematic(u2);
         int[] c3 = h.encodeSystematic(u3);
-        
+
         System.out.println("Résultats du codage systématique :");
         System.out.println("c0 = " + bitArrayToString(c0));
         System.out.println("c1 = " + bitArrayToString(c1));
         System.out.println("c2 = " + bitArrayToString(c2));
         System.out.println("c3 = " + bitArrayToString(c3));
         System.out.println();
+
+        // ===============================
+        // Question 7 : Ajout du bruit
+        // ===============================
+        String e1Str = "000 1000 0000 0000";
+        String e2Str = "000 0010 0000 0000";
+        String e3Str = "000 0000 0010 0000";
+        String e4Str = "000 0000 0000 0001";
+
+        int[] e1 = stringToBitArray(e1Str);
+        int[] e2 = stringToBitArray(e2Str);
+        int[] e3 = stringToBitArray(e3Str);
+        int[] e4 = stringToBitArray(e4Str);
+
+        int[] y1 = ajoutBruit(c0, e1);
+        int[] y2 = ajoutBruit(c1, e2);
+        int[] y3 = ajoutBruit(c2, e3);
+        int[] y4 = ajoutBruit(c3, e4);
+
+        System.out.println("Mots de code après bruitage (systématique) :");
+        System.out.println("y1 = " + bitArrayToString(y1));
+        System.out.println("y2 = " + bitArrayToString(y2));
+        System.out.println("y3 = " + bitArrayToString(y3));
+        System.out.println("y4 = " + bitArrayToString(y4));
+        System.out.println();
+
     }// main
 
 }// class
