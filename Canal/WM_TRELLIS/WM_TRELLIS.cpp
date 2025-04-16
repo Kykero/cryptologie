@@ -91,6 +91,16 @@ void WM_TRELLIS::TrellisEncode( int *m, int mLen, int *mc ){
         // Mise à jour de l'état en fonction du bit d'entrée et de la table nextState
         current_state = nextState[current_state][input_bit];
     }
+
+    // Ajout de la queue
+    int tail = 2;
+    for(int i = 0; i < tail; i++){
+      int input_bit = 0;
+      for(int j = 0; j < NUM_BITSBYARC; j++){
+        mc[out_index++] = trellisBits[current_state][input_bit][j];
+      }
+      current_state = nextState[current_state][input_bit];
+    }
 }
 
 /*--------------------------------------------------------------------------*
@@ -105,6 +115,8 @@ void WM_TRELLIS::TrellisEncode( int *m, int mLen, int *mc ){
  | Return value:                                                            |
  |   length of decoded message                                              |
  *--------------------------------------------------------------------------*/
+
+
 
 int WM_TRELLIS::TrellisDecode( int *mc, int mcLen, int *m )
 {
@@ -136,27 +148,27 @@ int WM_TRELLIS::TrellisDecode( int *mc, int mcLen, int *m )
   /* All paths must start from state 0, so we initialize that state to
      0 hamming distance, and label the remaining states as unreached. */
   h0[ 0 ] = 0;
-  for( state = 1; state < 8; state = state + 1 )
+  for( state = 1; state < NUM_STATES; state = state + 1 )  // Modified: used NUM_STATES instead of 8
     h0[ state ] = STATE_NOT_REACHED;
 
   /* Apply the Viterbi algorithm to decode. */
   for( bitNum = 0; bitNum < mLen; bitNum = bitNum + 1 ) //mLen bits à récupérer...
   {
     /* Indicate that the states in the next iteration are not yet reached. */
-    for( state = 0; state < 8; state = state + 1 )
+    for( state = 0; state < NUM_STATES; state = state + 1 )  // Modified: used NUM_STATES instead of 8
       h1[ state ] = STATE_NOT_REACHED;
 
     /* Loop through all the states in the current iteration, updating
        the values for states in the next iteration. */
-    for( state = 0; state < 8; state = state + 1 )
+    for( state = 0; state < NUM_STATES; state = state + 1 )  // Modified: used NUM_STATES instead of 8
       if( h0[ state ] != STATE_NOT_REACHED )
       {
         /* Update values for the state connected to this state by a 0 arc.
-           (Note: mc + 4 * bitNum is pointer arithmetic.  The four bits
-           used to encode bit bitNum of m are (mc + 4 * bitNum)[ 0...3 ]. */
+           (Note: mc + NUM_BITSBYARC * bitNum is pointer arithmetic.  The NUM_BITSBYARC bits
+           used to encode bit bitNum of m are (mc + NUM_BITSBYARC * bitNum)[ 0...NUM_BITSBYARC-1 ].) */  // Modified: replaced 4 by NUM_BITSBYARC
         next = nextState[ state ][ 0 ];
-        //Calcul de la distance entre la valeur de l'arc et le code (sur 4 bits)
-        h = HammingDist( mc + 4 * bitNum, trellisBits[ state ][ 0 ], 4 );
+        //Calcul de la distance entre la valeur de l'arc et le code (on compare NUM_BITSBYARC bits)
+        h = HammingDist( mc + NUM_BITSBYARC * bitNum, trellisBits[ state ][ 0 ], NUM_BITSBYARC );  // Modified: replaced 4 by NUM_BITSBYARC
         if( h1[ next ] == STATE_NOT_REACHED ||
             h1[ next ] > h0[ state ] + h )
         {
@@ -168,7 +180,7 @@ int WM_TRELLIS::TrellisDecode( int *mc, int mcLen, int *m )
 
         /* Update values for the state connected to this state by a 1 arc. */
         next = nextState[ state ][ 1 ];
-        h = HammingDist( mc + 4 * bitNum, trellisBits[ state ][ 1 ], 4 );
+        h = HammingDist( mc + NUM_BITSBYARC * bitNum, trellisBits[ state ][ 1 ], NUM_BITSBYARC );  // Modified: replaced 4 by NUM_BITSBYARC
         if( h1[ next ] == STATE_NOT_REACHED ||
             h1[ next ] > h0[ state ] + h )
         {
@@ -180,7 +192,7 @@ int WM_TRELLIS::TrellisDecode( int *mc, int mcLen, int *m )
       }
 
     /* Go on to the next iteration. */
-    for( state = 0; state < 8; state = state + 1 )
+    for( state = 0; state < NUM_STATES; state = state + 1 )  // Modified: used NUM_STATES instead of 8
     {
       h0[ state ] = h1[ state ];
       for( i = 0; i < mLen; i = i + 1 )
@@ -190,7 +202,7 @@ int WM_TRELLIS::TrellisDecode( int *mc, int mcLen, int *m )
 
   /* Find the state with the minimum hamming distance. */
   bestState = 0;
-  for( state = 1; state < 8; state = state + 1 )
+  for( state = 1; state < NUM_STATES; state = state + 1 )  // Modified: used NUM_STATES instead of 8
     if( h0[ state ] < h0[ bestState ] )
       bestState = state;
 
@@ -199,7 +211,7 @@ int WM_TRELLIS::TrellisDecode( int *mc, int mcLen, int *m )
     m[ i ] = m0[ bestState ][ i ];
 
   /*DELETE ALLOCATION*/
-  for (j=0; j<NUM_STATES; j++) {
+  for (j=0; j<NUM_STATES; j++) {  // Modified: used NUM_STATES instead of 8
     delete[] m0[j];
     delete[] m1[j];
   }

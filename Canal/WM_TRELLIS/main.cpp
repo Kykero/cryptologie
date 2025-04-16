@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
   processOptionsInLine(argc, argv);
   processAttribute();
 
-  int taille_message_code = messageLength*2;
+  int taille_message_code = messageLength*2 + 4;
   int* mc = new int[taille_message_code]; // Le message code
 
   WM_TRELLIS::TrellisEncode(message_binaire, messageLength, mc);
