@@ -4,6 +4,12 @@
 /**
  *  La classe est purement static.
  */
+
+/*
+ * Debusschere Mathieu
+ * Fernandez Nolahn
+ *
+ */
 class WM_TRELLIS {        
      
 private:     

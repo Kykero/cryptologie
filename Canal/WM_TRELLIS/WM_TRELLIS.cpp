@@ -1,3 +1,9 @@
+/*
+ * Debusschere Mathieu
+ * Fernandez Nolahn
+ *
+ */
+
 #include <iostream>
 #include <stdlib.h>
 using namespace std;

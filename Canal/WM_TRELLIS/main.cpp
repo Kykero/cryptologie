@@ -6,6 +6,11 @@
                Les routines sont extraites de livre de Cox-Miller-Bloom (Digital Watermarking)
 */
 
+/*
+ * Debusschere Mathieu
+ * Fernandez Nolahn
+ *
+ */
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
