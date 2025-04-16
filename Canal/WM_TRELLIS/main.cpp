@@ -48,7 +48,7 @@ void processAttribute(){
   for(int i=0; i<messageLength; i++) {
     message_binaire[i] = message[i]-'0'; //Transformation de la chaine de caractère en suite d'entier 0 ou 1 (les bits ...)
     if ((message_binaire[i] != 0) && (message_binaire[i] != 1)) {
-      cout<<"main: Erreur, le message n'est pas correct; cela doit être une succession de 0 et de 1...\n";
+      cout<<"main: Erreur, le message n'est pas correct; cela doit etre une succession de 0 et de 1...\n";
       exit(-1);
     }
     cout<<message_binaire[i]<<" , ";
@@ -73,7 +73,6 @@ int main(int argc, char *argv[]) {
   }
   cout<<endl<<endl;
 
-/*
   cout<<"Bruit sur le mot de code :\n";
   mc[4] = ((mc[4]+1)%2); // On inverse la quatrième position
   for(int i=0; i<taille_message_code; i++) {
@@ -81,6 +80,7 @@ int main(int argc, char *argv[]) {
   }
   cout<<endl<<endl;
 
+// -- Décodage --
   int* decode = new int[messageLength]; // Le message décodé
 
   WM_TRELLIS::TrellisDecode( mc, taille_message_code, decode);
@@ -92,5 +92,4 @@ int main(int argc, char *argv[]) {
 
   delete [] mc;
   delete [] decode;
-*/
 }

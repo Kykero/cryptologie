@@ -85,10 +85,25 @@ int WM_TRELLIS::trellisBits[ 8 ][ 2 ][ 4 ] = //Version livre p.150 ...
  |   none                                                                   |
  *--------------------------------------------------------------------------*/
 
-void WM_TRELLIS::TrellisEncode( int *m, int mLen, int *mc )
-{
-  cout<<"Completez WM_TRELLIS::TrellisEncode\n";
-  exit(1);
+void WM_TRELLIS::TrellisEncode( int *m, int mLen, int *mc ){
+    int current_state = 0;  // On démarre à l'état 0
+    int out_index = 0;      // Position courante dans le tableau de sortie mc
+
+    // Pour chaque bit du message d'entrée
+    for (int i = 0; i < mLen; i++)
+    {
+        int input_bit = m[i];
+        
+        // Copie des 4 bits de sortie correspondant à la transition
+        // Pour l'état actuel et selon le bit d'entrée, on récupère la séquence de 4 bits
+        for (int j = 0; j < NUM_BITSBYARC; j++)
+        {
+            mc[out_index++] = trellisBits[current_state][input_bit][j];
+        }
+        
+        // Mise à jour de l'état en fonction du bit d'entrée et de la table nextState
+        current_state = nextState[current_state][input_bit];
+    }
 }
 
 /*--------------------------------------------------------------------------*
