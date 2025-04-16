@@ -4,8 +4,8 @@ using namespace std;
 
 #include "WM_TRELLIS.hpp"
 
-int WM_TRELLIS::NUM_STATES        = 8;
-int WM_TRELLIS::NUM_BITSBYARC     = 4;
+int WM_TRELLIS::NUM_STATES        = 4;
+int WM_TRELLIS::NUM_BITSBYARC     = 2;
 int WM_TRELLIS::STATE_NOT_REACHED = -1; //Utilisé pour le déocdeur de Viterbi
 
 /* nextState -- description of the graph that defines the code.
@@ -15,16 +15,12 @@ int WM_TRELLIS::STATE_NOT_REACHED = -1; //Utilisé pour le déocdeur de Viterbi
    the 1 arc.
    nextState is global so that it can be used in other routines based on
    this trellis (TrellisDemodulate, TrellisEncode, and TrellisDecode) */
-int WM_TRELLIS::nextState[ 8 ][ 2 ] =
+int WM_TRELLIS::nextState[ 4 ][ 2 ] =
 {
-  0, 1,
-  2, 3,
-  4, 5,
-  6, 7,
-  0, 1,
-  2, 3,
-  4, 5,
-  6, 7,
+  0, 2,
+  0, 2,
+  1, 3,
+  1, 3,
 };
 
 /* trellisBits -- Labels on arcs in graph.  For each state, there are two
@@ -51,26 +47,17 @@ int WM_TRELLIS::nextState[ 8 ][ 2 ] =
 //  1, 1, 1, 1,
 //};
 
-int WM_TRELLIS::trellisBits[ 8 ][ 2 ][ 4 ] = //Version livre p.150 ...
+int WM_TRELLIS::trellisBits[ 4 ][ 2 ][ 2 ] = //Version livre p.150 ...
 {
-  0, 0, 0, 0, //A
-  0, 0, 0, 1,
-  0, 0, 1, 1, //B
-  1, 1, 0, 0,
-  1, 0, 1, 0, //C
-  1, 1, 1, 1,
-  1, 0, 0, 0, //D
-  0, 1, 0, 1,
-  0, 0, 1, 0, //E
-  1, 0, 0, 1,
-  1, 1, 1, 0, //F
-  1, 1, 0, 1,
-  0, 1, 0, 0, //G
-  1, 0, 1, 1,
-  0, 1, 1, 0, //H
-  0, 1, 1, 1,
+  0, 0,
+  1, 1,
+  1, 1,
+  0, 0,
+  1, 0,
+  0, 1,
+  0, 1,
+  1, 0,
 };
-
 
 /*--------------------------------------------------------------------------*
  | TrellisEncode -- encode a message with a sequence of bits, using a       |
