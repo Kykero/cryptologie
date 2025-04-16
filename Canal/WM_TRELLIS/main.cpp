@@ -2,7 +2,7 @@
   Name: main.cpp
   Author: Marc CHAUMONT
   Date: 22/03/16
-  Description: Permet d'appeler le codeur et le décodeur convolutif
+  Description: Permet d'appeler le codeur et le decodeur convolutif
                Les routines sont extraites de livre de Cox-Miller-Bloom (Digital Watermarking)
 */
 
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
   processAttribute();
 
   int taille_message_code = messageLength*4;
-  int* mc = new int[taille_message_code]; // Le message codé
+  int* mc = new int[taille_message_code]; // Le message code
 
   WM_TRELLIS::TrellisEncode(message_binaire, messageLength, mc);
 
@@ -80,8 +80,8 @@ int main(int argc, char *argv[]) {
   }
   cout<<endl<<endl;
 
-// -- Décodage --
-  int* decode = new int[messageLength]; // Le message décodé
+// -- Decodage --
+  int* decode = new int[messageLength]; // Le message decode (tableau pour stocker le message decode)
 
   WM_TRELLIS::TrellisDecode( mc, taille_message_code, decode);
   cout<<"D\'ecodage par Viterbi :\n";
@@ -89,6 +89,23 @@ int main(int argc, char *argv[]) {
     cout<<decode[i]<<" , ";
   }
   cout<<endl<<endl;
+
+  // Comparaison entre le message source et le message decode
+  bool identique = true;
+  for(int i = 0; i < messageLength; i++) {
+    if(message_binaire[i] != decode[i]) {
+      identique = false;
+      break;
+    }
+  }
+
+  if(identique) {
+    cout << "Le message decode est identique au message source.\n";
+  }
+  else {
+    cout << "Le message decode diffère du message source.\n";
+  }
+
 
   delete [] mc;
   delete [] decode;
