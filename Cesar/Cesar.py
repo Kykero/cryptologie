@@ -56,7 +56,7 @@ def decryptage_vigenere(code, key):
             key_letter = key[key_index % key_length]
             # On récupère l'indice du décalage en fonction de la lettre de la clé
             index_key = alphabet.index(key_letter)
-            # Calcul de l'indice décrypté en faisant le décalage inverse (soustraction) et modulo 26
+            #Calcul du nouvel indice de manière Cyclique
             new_index = (index_cipher - index_key) % len(alphabet)
             reponse.append(alphabet[new_index])
             # On ne met à jour l'indice de la clé que pour les caractères alphabétiques
@@ -99,6 +99,7 @@ for k in range(0,25):
 print(' ')
 message_decrypte4 = decryptage('MOVK OCD ZVEC PKMSVO AEO ZBOFE',10)
 print(message_decrypte4)
+
 
 # ----------- Main Vigenère ----------------------------
 print(' ----------- ')
