@@ -34,26 +34,41 @@ def decryptage(message,k):
                 #On converve les espaces
                 message_decrypte.append(a)
         else:
-            #on garde les espaces
+            #On garde les espaces
             message_decrypte.append(' ')
     return ''.join(message_decrypte)
 
 
+# Question 1
 print("Pour la question 1, un cercle serait une forme géometrique mieux adapté pour représenter l'alphabet du code César l'alphabet")
 print(' ------------ ')
 
-message_encode = encodage('ABC', 25)
+# Question 2
+print(' ------------ ')
+print('Question 2')
+message_encode = encodage('LES VACANCES SONT TERMINEES', 11)
 print(message_encode)
 
+# Question 3 
 print(' ------------ ')
+print('Question 3')
 message_decrypte = decryptage('YHQL YLGL YLFL',3)
 print(message_decrypte)
 
+# Question 4 
 print(' ------------ ')
+print('Question 4')
+
 for k in range(0,25):
     message_decrypte3 = decryptage('MOVK OCD ZVEC PKMSVO AEO ZBOFE',k)
     print(message_decrypte3)
 
-print(' ------------ ')
+print(' ')
 message_decrypte4 = decryptage('MOVK OCD ZVEC PKMSVO AEO ZBOFE',10)
 print(message_decrypte4)
+
+
+
+
+
+
